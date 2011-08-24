@@ -1,0 +1,43 @@
+<div class="frame">
+  <div class="head">
+    <h1>Browse tests</h1>
+  </div>
+  <div class="content">
+    <table class="generic">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Url</th>
+        <th>Date</th>
+        <th>User</th>
+        <th>Concurrent</th>
+        <th>Time</th>
+        <th>Availability</th>
+        <th>Transactions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @load_tests.each do |load_test| %>
+          <tr class="scenario_row">
+            <td>
+              <div class="commit ta_l">
+                <%= link_to "details", testing_siege_load_test_path(:id => load_test.mark), :class => "bt details" %>
+              </div>
+            </td>
+            <td><%= load_test.logs[:date] %></td>
+            <td><%= load_test.urls.join("<br>").html_safe %></td>
+            <td><%= load_test.user.present? ? load_test.user : "-" %></td>
+            <td><%= load_test.concurrent %></td>
+            <td><%= load_test.time %></td>
+            <td><%= f_prec(load_test.logs[:availability]) %></td>
+            <td><%= load_test.logs[:transactions] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+

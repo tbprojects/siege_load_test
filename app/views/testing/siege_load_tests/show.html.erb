@@ -1,0 +1,59 @@
+<div class="frame">
+  <div class="head">
+    <h1>Test result</h1>
+  </div>
+  <div class="content">
+    <div class="pdd">
+      <fieldset class="inputs labels_200">
+        <% if @load_test %>
+            <div style="width:50%; float:left">
+              <h2>Configuration</h2>
+              <ol>
+                <% SiegeLoadTest::DEFAULT_PARAMS.keys.each do |key, val| %>
+                    <li class="string"><label><%= key.to_s.humanize %>: </label>
+
+                      <div class="txt"><%= [@load_test.send(key)].flatten.join("<br>").html_safe %></div>
+                    </li>
+                <% end %>
+              </ol>
+            </div>
+
+            <div style="width:50%; float:right">
+              <h2>Results</h2>
+              <ol>
+                <% @load_test.logs.each do |key, val| %>
+                    <li class="string"><label><%= key.to_s.humanize %>: </label>
+
+                      <div class="txt"><%= f_prec(val) %></div>
+                    </li>
+                <% end %>
+              </ol>
+            </div>
+
+            <div style="clear:both"></div>
+
+            <%= semantic_form_for SiegeLoadTest.new, :url => testing_siege_load_tests_path do |f| %>
+                <%= hidden_field_tag :mark, @load_test.mark %>
+                <div class="commit ta_c pdd">
+                  <div class="bt">
+                    <%= f.submit "Perform again" %>
+                  </div>
+                </div>
+            <% end %>
+
+        <% else %>
+            <% if @wait_to %>
+                <% if DateTime.now.to_s(:db) < @wait_to %>
+                    <p>Waiting for test end...</p>
+                    <script type="text/javascript">setTimeout("window.location.reload()", 5000);</script>
+                <% else %>
+                    <p class="inline-errors">Something went wrong... Siege error</p>
+                <% end %>
+            <% else %>
+                <p>No such test!</p>
+            <% end %>
+        <% end %>
+      </fieldset>
+    </div>
+  </div>
+</div>        

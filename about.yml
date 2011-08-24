@@ -1,0 +1,7 @@
+author: boro
+summary: This plugin allows you to run Siege (http://www.joedog.org/index/siege-home) load tests directly from Rails application.
+homepage:
+plugin:
+license: MIT
+version: 0.1
+rails_version: 3.0+

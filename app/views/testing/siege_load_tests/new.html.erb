@@ -1,0 +1,34 @@
+<div class="frame">
+  <div class="head">
+    <h1>New test</h1>
+  </div>
+  <div class="content">
+    <div class="pdd">
+      <%= semantic_form_for @load_test, :url => testing_siege_load_tests_path do |f| %>
+
+          <h2>Configuration</h2>
+
+          <%= f.inputs do %>
+
+              <%= f.input :urls, :as => :text %>
+              <%= f.input :user, :as => :string %>
+              <%= f.input :time, :as => :string %>
+              <%= f.input :delay, :as => :string %>
+              <%= f.input :concurrent, :as => :string %>
+
+          <% end %>
+
+          <div class="commit ta_c pdd">
+            <div class="bt">
+              <%= f.submit "Perform test" %>
+            </div>
+          </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
