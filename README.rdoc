@@ -9,15 +9,14 @@ Install with:
 
 == Usage
 
-	http://localhost:3000/testing/siege_load_tests
+    > http://localhost:3000/testing/siege_load_tests
 
 or
 
-	$ rails c
-	
-	test = SiegeLoadTest.new(options)
-	test.add_url("example.com")
-	test.perform
+    > $ rails c	
+    > test = SiegeLoadTest.new(options)
+    > test.add_url("example.com")
+    > test.perform
 
 === Options
 
