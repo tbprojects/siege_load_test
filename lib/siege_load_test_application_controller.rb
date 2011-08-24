@@ -2,8 +2,8 @@ module SiegeLoadTestApplicationController
 
   protected
   def siege_login
-    temp = request.env['HTTP_USER_AGENT'].split
-    if temp[0].include? SiegeLoadTest.token
+    temp = (request.env['HTTP_USER_AGENT'] || "").split
+    if temp.present? and temp[0].include? SiegeLoadTest.token
       user = User.find_by_username(temp[1])
       if request.env['warden'].present?
         # devise
