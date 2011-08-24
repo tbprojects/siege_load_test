@@ -4,7 +4,7 @@ This plugin allows you to run Siege (http://www.joedog.org/index/siege-home) loa
 
 Repository is on github: https://github.com/boro-selleo/siege_load_test
 
-Install with:
+First - install latest Siege from http://www.joedog.org/index/siege-home. Second - install plugin with:
   rails plugin install git://github.com/boro-selleo/siege_load_test.git
 
 == Usage
