@@ -5,36 +5,34 @@ This plugin allows you to run Siege (http://www.joedog.org/index/siege-home) loa
 Repository is on github: https://github.com/boro-selleo/siege_load_test
 
 Install with:
-  rails plugin install https://boro-selleo@github.com/boro-selleo/siege_load_test.git
+  rails plugin install git://github.com/boro-selleo/siege_load_test.git
 
 == Usage
 
-http://localhost:3000/testing/siege_load_tests
+	http://localhost:3000/testing/siege_load_tests
 
-OR
+or
 
-$ rails c
+	$ rails c
+	
+	test = SiegeLoadTest.new(options)
+	test.add_url("example.com")
+	test.perform
 
-test = SiegeLoadTest.new(options)
-test.add_url("example.com")
-test.perform
+=== Options
 
-==== options (description from siege manual)
+- options[:time] - TIME, allows you to run the test for a selected period of time. Parameter accepts integer of seconds. Default is 60
+- options[:delay] - Each siege simulated user is delayed for a random number of seconds between one and NUM. Default is 1
+- options[:concurrent] - Concurrent users ( requires argument ). This option allows the user to stress the web server with NUM number of simulated users. Default is 15
+- options[:internet] - This option is used with a configuration file, that is a file containing many URLs. With this option in place, each user randomly hits any one of the URLs in the file each time it hits the server. Default is false
 
-options[:time] - Each siege simulated user is delayed for a random number of seconds between one and NUM. If you are benchmarking performance, it is recommended that you use a 1 second delay ( -d1 ). The default value is three (3 ). This delay allows for the transactions to stagger rather then to allow them to pound the server in waves.
+=== Authentication
 
-options[:concurrent] - Concurrent users ( requires argument ). This option allows the user to stress the web server with NUM number of simulated users. The amount is limited only by the computing resources available, but realistically a couple of hundred simulated users is equal to many times that that number in actual user sessions. The number you select represents the number of transactions your server is handling. It does NOT represent the number of concurrent sessions. Remember, real users take some time to actually read the page that they've requested....
-
-options[:internet] - This option is used with a configuration file, that is a file containing many URLs. With this option in place, each user randomly hits any one of the URLs in the file each time it hits the server. Much like you can't tell the users of your website which pages they can view, you have no control over which pages siege will hit in internet mode. With this option set, there is no guarantee that every page in the file will be hit.
-
-
-==== authentication
-
-options[:user] - Username that allow to set current_user in ActionController
+- options[:user] - Username that allow to set current_user in ActionController. Default is ""
 
 Siege Load Test uses autologin mechanizm to access pages witch are avaialble only for certain / logged in users
 
-==== output information
+=== Output information
 
 date, transactions, availability, elapsed time, data transferred, response time, transaction rate, throughput, concurrency, successful transactions, failed transactions
 
