@@ -2,7 +2,7 @@ module Testing
   module SiegeLoadTestsHelper
 
     def asset_link(path)
-      "/testing/assets/#{path}"
+      "/testing/siege_load_test/assets/#{path}"
     end
 
     # menu highlighting
@@ -17,10 +17,5 @@ module Testing
         text
       end
     end
-
-    def milliseconds_to_wait(seconds)
-      (time + 5) * 1000
-    end
-
   end
 end

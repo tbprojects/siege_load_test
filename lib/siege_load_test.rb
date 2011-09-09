@@ -16,6 +16,7 @@ class SiegeLoadTest
 
   URL_FILE = "#{Rails.root.to_s}/log/siege_urls.txt"
   LOG_FILE = "#{Rails.root.to_s}/log/siege.log"
+  TOKEN_FILE = "#{Rails.root.to_s}/vendor/plugins/siege_load_test/token"
 
   def initialize(options = {})
     set_params(DEFAULT_PARAMS)    
@@ -28,14 +29,12 @@ class SiegeLoadTest
       store_urls_in_file
       fetch_uniq_log_mark
       make_command
-      self.output = Thread.new do
-        self.output = `#{self.command}`
-        remove_urls_file
+      if asynchronous
+        Navvy::Job.enqueue(SiegeLoadTest, :perform_test, self)
+      else
+        SiegeLoadTest.perform_test(self)
       end
-      unless asynchronous
-        self.output.join
-        self.logs = read_logs_for(mark)
-      end
+      self.logs = read_logs_for(mark)
       true
     else
       false
@@ -64,12 +63,17 @@ class SiegeLoadTest
   end
 
   def self.token
-    "#{USER_AGENT_PREFIX}-#{Rails.root.to_s.crypt(Date.today.day.to_s)}"
+    token = `cat #{TOKEN_FILE}`
+    "#{USER_AGENT_PREFIX}-#{token}"
   end
 
   def user_agent
     "#{self.class.token} #{user}"
   end
+
+  def wait_to
+    DateTime.now + (time.to_i + 5 + Navvy.configuration.sleep_time).seconds
+  end  
 
   def self.find(mark)
     result = new
@@ -88,7 +92,16 @@ class SiegeLoadTest
     log.scan(/ID([\w]+)!ID/).flatten.map{|id| find(id)}
   end
 
+  def self.queued_jobs
+    Navvy::Job.where(:object => "SiegeLoadTest")
+  end
+  
   private
+  def self.perform_test(test)
+    test.output = `#{test.command}`
+    test.send :remove_urls_file
+  end  
+
   def read_logs_for(mark)
     log = `cat #{LOG_FILE} | grep -A1 "ID#{mark}!ID" | sed -n 2p`.split(",")    
     self.logs = if log.present?
@@ -134,7 +147,7 @@ class SiegeLoadTest
   end
 
   def create_log_file
-    File.open(URL_FILE, 'w') {|f| f.write "" } unless File.file? LOG_FILE
+    File.open(LOG_FILE, 'w') {|f| f.write "" } unless File.file? LOG_FILE
   end
 
   def remove_urls_file
@@ -151,5 +164,9 @@ class SiegeLoadTest
   def valid_config?
     errors.add(:urls, "No urls given") unless urls.present?
     errors.blank?
+  end
+
+  def self.generate_token    
+    File.open(TOKEN_FILE, 'w') {|f| f.write(rand(36**8).to_s(36)) }    
   end
 end

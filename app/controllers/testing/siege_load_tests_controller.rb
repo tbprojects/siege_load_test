@@ -1,4 +1,6 @@
-class Testing::SiegeLoadTestsController < Testing::ApplicationController
+class Testing::SiegeLoadTestsController < ActionController::Base
+  layout '/testing/layouts/siege_load_test'
+  helper :all
 
   def index
     @load_tests = SiegeLoadTest.all.reverse
@@ -17,7 +19,7 @@ class Testing::SiegeLoadTestsController < Testing::ApplicationController
     end
     @load_test.asynchronous = true
     if @load_test.perform
-      redirect_to testing_siege_load_test_path(@load_test.mark, :wait_to => (DateTime.now + (@load_test.time.to_i + 5).seconds).to_s(:db))
+      redirect_to testing_siege_load_test_path(@load_test.mark, :wait_to => @load_test.wait_to.to_s(:db))
     else
       render :new
     end

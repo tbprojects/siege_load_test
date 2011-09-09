@@ -45,10 +45,14 @@
             <% if @wait_to %>
                 <% if DateTime.now.to_s(:db) < @wait_to %>
                     <p>Waiting for test end...</p>
-                    <script type="text/javascript">setTimeout("window.location.reload()", 5000);</script>
                 <% else %>
-                    <p class="inline-errors">Something went wrong... Siege error</p>
+                    <% if SiegeLoadTest.queued_jobs.present? %>
+                        <p class="inline-errors">Test is probably still in navvy job queue...</p>
+                    <% else %>
+                        <p class="inline-errors">Something went wrong...</p>
+                    <% end %>
                 <% end %>
+                <script type="text/javascript">setTimeout("window.location.reload()", 5000);</script>
             <% else %>
                 <p>No such test!</p>
             <% end %>

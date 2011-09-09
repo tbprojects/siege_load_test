@@ -2,9 +2,11 @@
 
 This plugin allows you to run Siege (http://www.joedog.org/index/siege-home) load tests directly from Rails application.
 
+For delayed testing purposes this plugin requires Navvy gem to be installed (http://github.com/jeffkreeftmeijer/navvy.git)
+
 Repository is on github: https://github.com/boro-selleo/siege_load_test
 
-First - install latest Siege from http://www.joedog.org/index/siege-home. Second - install plugin with:
+Install with:
   rails plugin install git://github.com/boro-selleo/siege_load_test.git
 
 == Usage
